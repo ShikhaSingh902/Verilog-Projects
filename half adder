@@ -1,0 +1,30 @@
+//Structural 
+module half_adder_structural(S,C,A,B); 
+ input A,B; 
+ output S,C; 
+ xor(S,A,B); 
+ and(C,A,B); 
+endmodule 
+
+
+//Data flow 
+module half_adder_df(S,C,A,B); 
+ input A,B; 
+ output S,C; 
+ assign S=A^B; 
+ assign C=A&B; 
+endmodule 
+
+
+//Behavioral 
+module half_adder_b(S,C,A,B); 
+ input A,B; 
+ output reg S,C; 
+ always@(A or B) 
+ begin 
+ if(A==0 && B==0) begin S=0;C=0; end 
+ else if(A==0 && B==1) begin S=1;C=0; end 
+ else if(A==1 && B==0) begin S=1;C=0; end 
+ else begin S=0;C=1; end  
+ end 
+endmodule
