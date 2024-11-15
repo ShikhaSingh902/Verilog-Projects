@@ -1,0 +1,12 @@
+module mux16x1(in,sel,out); 
+ input [0:15] in; 
+ input [0:3] sel; 
+ output out; 
+ wire [0:3] ma; 
+ mux4x1_dataflow mux1(in[0],in[1],in[2],in[3],sel[3],sel[2],ma[0]); 
+ mux4x1_dataflow mux2(in[4],in[5],in[6],in[7],sel[3],sel[2],ma[1]); 
+//s[3] is LSB 
+ mux4x1_dataflow mux3(in[8],in[9],in[10],in[11],sel[3],sel[2],ma[2]); 
+ mux4x1_dataflow mux4(in[12],in[13],in[14],in[15],sel[3],sel[2],ma[3]); 
+ mux4x1_dataflow mux5(ma[0],ma[1],ma[2],ma[3],sel[1],sel[0],out); 
+endmodule
