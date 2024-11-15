@@ -1,0 +1,35 @@
+//Structural 
+module mux4x1_structural(a,b,c,d,s0,s1,out); 
+output out; 
+ input a, b, c, d, s0, s1; 
+ wire w1, w2, T1, T2, T3, T4; 
+ not (w1, s0), (w2, s1); 
+ and (T1, a, w1, w2), (T2, b, w1, s1),(T3, c, s0, w2), (T4, d, s0, s1); 
+ or(out, T1, T2, T3, T4); 
+endmodule 
+
+
+//Data flow 
+module mux4x1_dataflow ( a, b, c, d, s0, s1,out); 
+ //s0 is LSB s1 is MSB // a is MSB d is LSB 
+ input a,b,c,d,s0,s1; 
+ output out; 
+ assign out = s1 ? (s0 ? d : c) : (s0 ? b : a); 
+endmodule 
+
+
+//Behavioral 
+module mux4x1_behavioral ( a, b, c, d, s0, s1, out); 
+ input wire a, b, c, d; 
+ input wire s0, s1; 
+ output reg out; 
+ always @ (a or b or c or d or s0, s1) 
+ begin 
+ case (s0 | s1) 
+ 2'b00 : out = a; 
+ 2'b01 : out = b; 
+ 2'b10 : out = c; 
+ 2'b11 : out = d; 
+ endcase 
+ end 
+endmodule
