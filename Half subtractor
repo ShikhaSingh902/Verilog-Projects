@@ -1,0 +1,29 @@
+//Structural 
+module half_subtractor(diff,bor, A, B); 
+ input A, B; 
+ output diff,bor; 
+ wire w1; 
+ xor (diff, A, B); 
+ not (w1, A); 
+ and (bor, w1, B); 
+endmodule 
+
+
+//Dataflow 
+module half_subtractor_df(diff, bor, A, B); 
+ input A, B; 
+ output diff,bor; 
+ assign diff = A ^ B; 
+ assign bor = ~A & B; 
+endmodule 
+
+
+//Behavioral 
+module half_subtractor_b(diff, bor, A, B); 
+ input A, B; 
+ output reg diff, bor; 
+ always @(A or B) begin 
+ diff = A ^ B; 
+ bor = ~A & B; 
+ end 
+endmodule
