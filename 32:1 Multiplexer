@@ -1,0 +1,12 @@
+//32x1 mux using 8x1 mux and 4x1 mux
+module mux32x1(in,sel,out); 
+ input [0:31] in; 
+ input [0:4] sel; 
+ output out; 
+ wire [0:3] ma; 
+ mux8x1_dataflow mux1(in[0],in[1],in[2],in[3],in[4],in[5],in[6],in[7],sel[4],sel[3], sel[2],ma[0]); 
+ mux8x1_dataflow mux2(in[8],in[9],in[10],in[11],in[12],in[13],in[14],in[15],sel[4],sel[3],sel[2],ma[1]); //s[4] is LSB 
+ mux8x1_dataflow mux3(in[16],in[17],in[18],in[19],in[20],in[21], in[22],in[23],sel[4],sel[3],sel[2],ma[2]); 
+ mux8x1_dataflow mux4(in[24],in[25],in[26],in[27],in[28],in[29], in[30],in[31],sel[4],sel[3],sel[2],ma[3]); 
+ mux4x1_dataflow mux5(ma[0],ma[1],ma[2],ma[3],sel[1],sel[0],out); 
+endmodule 
