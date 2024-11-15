@@ -1,0 +1,50 @@
+//Structural 
+module mux8x1_structural(D0, D1, D2, D3, D4, D5, D6, D7, S0,S1,S2,out); 
+ input D0, D1, D2, D3, D4, D5, D6, D7, S0, S1, S2; 
+ output out; 
+ wire T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11; 
+ not(T1, S0); 
+ not(T2, S1); 
+ not(T3, S2); 
+ and(T4, D0, T1, T2, T3), (T5, D1, S0, T2, T3); 
+ and(T6, D2, T1, S1, T3), (T7, D3, S0, S1, T3); 
+ and(T8, D4, T1, T2, S2), (T9, D5, S0, T2, S2); 
+ and(T10, D6, T1, S1, S2), (T11, D7, S0, S1, S2); 
+ or(out, T4, T5, T6, T7, T8, T9, T10, T11); 
+endmodule
+
+
+ //Behavioral 
+module mux8x1_behavioral(out,D0,D1,D2,D3,D4,D5,D6,D7,S0,S1,S2); 
+ input wire D0, D1, D2, D3, D4, D5, D6, D7, S0, S1, S2; 
+ output reg out; 
+ always@(*) 
+ begin 
+ case(S0 | S1 | S2) 
+ 3'b000: out=D0; 
+ 3'b001: out=D1; 
+ 3'b010: out=D2; 
+ 3'b011: out=D3; 
+ 3'b100: out=D4; 
+ 3'b101: out=D5; 
+ 3'b110: out=D6; 
+ 3'b111: out=D7; 
+ default: out=1'b0; 
+ endcase 
+ end 
+endmodule 
+
+
+ //Data flow 
+module mux8x1_dataflow(D0,D1,D2,D3,D4,D5,D6,D7,S0,S1,S2,out); 
+ input D0,D1,D2,D3,D4,D5,D6,D7,S0,S1,S2; 
+ output out; 
+ wire S1bar,S2bar,S0bar; 
+ assign S1bar=~S1; 
+ assign S0bar=~S0; 
+ assign S2bar=~S2; 
+ assign out = (D0 & S2bar & S1bar & S0bar) | (D1 & S2bar &S1bar & S0) | 
+(D2 & S2bar & S1 & S0bar) | (D3 & S2bar & S1 & S0) | 
+(D4 & S2 & S1bar & S0bar) | (D5 & S2 & S1bar & S0) | 
+(D6 & S2 & S1 & S0bar) |(D7 & S2 & S1 & S0); 
+endmodule 
