@@ -1,0 +1,61 @@
+//Structural 
+
+module demux1x4_structural(d0,d1,d2,d3,a,b,d); 
+input a,b,d; 
+output d0,d1,d2,d3; 
+wire w1,w2; 
+not p1(w1,a); 
+not p2(w2,b); 
+and g1(d0,w1,w2,d); 
+and g2(d1,w1,b,d); 
+and g3(d2,a,w2,d);
+and g4(d3,a,b,d); 
+endmodule 
+
+//Behavioral 
+
+module demux1x4_beh(d0,d1,d2,d3,a,b,d); 
+input a,b,d; 
+output reg d0,d1,d2,d3; 
+always@(a or b) 
+begin 
+if (a==0 && b==0) 
+d0=d; 
+else if (a==0 && b==1) 
+d1=d; 
+else if (a==1 && b==0) 
+d2=d; 
+else 
+d3=d; 
+end 
+endmodule
+
+//Data flow 
+
+module demux1x4(d0,d1,d2,d3,a,b,d); //a is msb and d is input ,d0 is msb 
+ input a,b,d; 
+ output d0,d1,d2,d3; 
+ assign d0=(~a&~b&d);
+assign d1=(~a&b&d); 
+ assign d2=(a&~b&d); 
+ assign d3=(a&b&d); 
+endmodule 
+
+ //Testbench 
+
+module demux1x4_test(); 
+ reg a,b,d; 
+ wire d0,d1,d2,d3; 
+ demux1x4 uut(d0,d1,d2,d3,a,b,d); 
+ initial begin 
+ a=0;b=0;d=1;#100 
+ a=0;b=1;d=1;#100 
+ a=1;b=0;d=1;#100 
+ a=1;b=1;d=1; 
+ #100; 
+ $stop(); 
+ end 
+ initial begin 
+ $monitor("d0=%d,d1=%d,d2=%d,d3=%d",d0,d1,d2,d3); 
+ end 
+endmodule 
