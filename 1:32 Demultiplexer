@@ -1,0 +1,37 @@
+//Code 
+
+module demux1x32(s,d,y); 
+ input [4:0]s; 
+ input d; 
+ output [31:0]y; 
+ wire w1,w2,w3,w4; 
+ demux1x4 f(w1,w2,w3,w4,s[4],s[3],d); 
+ demux1x8 f1(s[2],s[1],s[0],w1,y[7:0]); 
+ demux1x8 f2(s[2],s[1],s[0],w2,y[15:8]); 
+ demux1x8 f3(s[2],s[1],s[0],w3,y[23:16]); 
+ demux1x8 f4(s[2],s[1],s[0],w4,y[31:24]); 
+endmodule 
+
+ //Testbench 
+
+module demux1x32_test(); 
+ reg [4:0]s; 
+ reg d; 
+ wire [31:0]y; 
+ demux1x32 utt(s,d,y); 
+ initial begin 
+ d=1; 
+ end 
+ initial begin 
+ s=5'b00000;#10 
+ s=5'b00001;#10 
+ s=5'b00010;#10 
+ s=5'b11100;#10 
+ s=5'b00111;#10 
+ s=5'b11000;#10 
+ s=5'b00110;#10 
+ s=5'b01000;#10 
+ s=5'b11111;#10 
+ $finish; 
+ end 
+endmodule
