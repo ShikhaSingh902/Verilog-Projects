@@ -1,0 +1,42 @@
+module demux1x16(s,d,y); 
+ input [3:0]s; 
+ input d; 
+ output [15:0]y; 
+ wire w1,w2,w3,w4; 
+ demux1x4 f(w1,w2,w3,w4,s[3],s[2],d); 
+ demux1x4 f1(y[0],y[1],y[2],y[3],s[1],s[0],w1); 
+ demux1x4 f2(y[4],y[5],y[6],y[7],s[1],s[0],w2); 
+ demux1x4 f3(y[8],y[9],y[10],y[11],s[1],s[0],w3); 
+ demux1x4 f4(y[12],y[13],y[14],y[15],s[1],s[0],w4); 
+endmodule 
+
+ //Testbench
+
+module demux1x16_test(); 
+ reg [3:0]s; 
+ reg d; 
+ wire [15:0]y; 
+ demux1x16 uut(s,d,y); 
+ initial begin 
+ d=1; 
+ end 
+ initial begin 
+ s=4'b0000;#100 
+ s=4'b0001;#100 
+ s=4'b0010;#100 
+ s=4'b0011;#100 
+ s=4'b0100;#100 
+ s=4'b0101;#100 
+ s=4'b0110;#100 
+ s=4'b0111;#100 
+ s=4'b1000;#100 
+ s=4'b1001;#100 
+ s=4'b1010;#100 
+ s=4'b1011;#100 
+ s=4'b1100;#100 
+ s=4'b1101;#100 
+ s=4'b1110;#100 
+ s=4'b1111;#100 
+ $finish; 
+ end 
+endmodule
