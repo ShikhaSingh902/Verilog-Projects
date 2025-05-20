@@ -1,0 +1,75 @@
+//Structural 
+
+module demux1x8_struct(a,b,c,d1,d); 
+ input a,b,c,d1; 
+ output [7:0]d; 
+ wire w1,w2,w3; 
+ not p1(w1,a); 
+ not p2(w2,b); 
+ not p3(w3,c); 
+ and q1(d[0],w1,w2,w3,d1); 
+ and q2(d[1],w1,w2,c,d1); 
+ and q3(d[2],w1,b,w3,d1); 
+ and q4(d[3],w1,b,c,d1); 
+ and q5(d[4],a,w2,w3,d1); 
+ and q6(d[5],a,w2,c,d1); 
+ and q7(d[6],a,b,w3,d1); 
+ and q8(d[7],a,b,c,d1); 
+endmodule 
+
+//Behavioral 
+
+module demux1x8_beh(a,b,c,d1,d); 
+ input a,b,c,d1; 
+ output reg [7:0]d; 
+ always @(a,b,c) 
+ begin 
+ case({a,b,c}) 
+ 3'b000:d[0]=d1; 
+ 3'b001:d[1]=d1; 
+ 3'b010:d[2]=d1; 
+ 3'b011:d[3]=d1; 
+ 3'b100:d[4]=d1; 
+ 3'b101:d[5]=d1; 
+ 3'b110:d[6]=d1; 
+ 3'b111:d[7]=d1; 
+ endcase 
+ end 
+endmodule 
+
+//Data flow 
+
+module demux1x8(a,b,c,d1,d);//a is msb dl is input 
+ input a,b,c,d1; 
+ output [7:0]d; 
+ assign d[0]=~a&~b&~c&d1;//d0 is MSB 
+ assign d[1]=~a&~b&c&d1; 
+ assign d[2]=~a&b&~c&d1; 
+ assign d[3]=~a&b&c&d1; 
+ assign d[4]=a&~b&~c&d1; 
+ assign d[5]=a&~b&c&d1; 
+ assign d[6]=a&b&~c&d1; 
+ assign d[7]=a&b&c&d1; 
+endmodule 
+
+ //Testbench 
+
+module demux1x8_test(); 
+ reg a,b,c,d1; 
+ wire [7:0]d; 
+ demux1x8 uut(a,b,c,d1,d); 
+ initial begin 
+ d1=1; 
+ end 
+ initial begin 
+ a=0;b=0;c=0;#10 
+ a=0;b=0;c=1;#10 
+ a=0;b=1;c=0;#10 
+ a=0;b=1;c=1;#10 
+ a=1;b=0;c=0;#10 
+ a=1;b=0;c=1;#10 
+ a=1;b=1;c=0;#10 
+ a=1;b=1;c=1;#10 
+ $finish; 
+ end 
+endmodule 
